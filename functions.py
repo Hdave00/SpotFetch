@@ -318,7 +318,7 @@ def download_spotify_song(format: typing.Literal["mp3", "flac", "m4a"], metadata
         print(f"File {final_audio_file_path} already exists. Skipping download.")
         return
     
-    image_file_path = os.path.join(output_path, "temp_cover.jpg")
+    image_file_path = os.path.join(output_path, f"temp_cover_{track_name}.jpg")
 
     # getting the image
     if image_url:
@@ -374,7 +374,7 @@ def download_spotify_song(format: typing.Literal["mp3", "flac", "m4a"], metadata
         print(f"\nAn error occurred during audio download for the track {track_name}: {e}")
         if image_file_path and os.path.exists(image_file_path):
             os.remove(image_file_path)
-        return
+        raise  # re-raise so batch_download.py can catch it and log to skipped_songs
 
     # embedding metadata and album image
     if downloaded_file_path and os.path.exists(downloaded_file_path):
