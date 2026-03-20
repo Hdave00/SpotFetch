@@ -22,8 +22,8 @@ start_file = args.start
 
 # set the directory with the csv files (albums, playlists etc, obtained from exportify or otherwise)
 # set the output folder to where the subfiles for album headers, playlist headers etc get created, to store the tracks therein
-csv_folder = r"C:Users\daven\Music\likedonly"
-output_base = r"C:Users\daven\Music\likedtracks"
+csv_folder = r"C:path\to\your\csvfile"
+output_base = r"C:output\file\path\for\converted songs"
 
 # set the default audio format to download in, AND set the platform to get the music from
 audio_format = "mp3"   # change if you want flac or m4a

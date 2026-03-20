@@ -30,7 +30,7 @@ A simple python program to download Music from various platfroms using yt-dlp ( 
 - Clone this repository ( or just download it as a zip file and uncompress it ):
 
 ```bash
-git clone https://github.com/MrElyazid/SpotFetch.git
+git clone https://github.com/Hdave00/SpotFetch
 ```
 
 - then :
