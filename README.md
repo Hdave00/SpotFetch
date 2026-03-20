@@ -129,7 +129,7 @@ pkg install git python ffmpeg
 - Clone this repo :
 
 ```bash
-git clone https://github.com/MrElyazid/SpotFetch
+git clone https://github.com/Hdave00/SpotFetch
 ```
 
 - cd into the directory :
