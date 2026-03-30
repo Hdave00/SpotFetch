@@ -172,7 +172,7 @@ def run_batch_download():
         "Point to a folder containing Exportify CSV files (one per album/playlist).\n"
         "Each CSV will become its own subfolder in your output directory.\n",
         "The folders name and structure will be the same as the Exportify CSV",
-        style="italic white"
+        style="italic_white"
     ))
     console.print()
 
