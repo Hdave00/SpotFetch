@@ -1,6 +1,6 @@
 """This is the main TUI file, core logic and functions is in functions.py"""
 
-import functions
+import functions, batch_download
 import os
 import sys
 from rich.console import Console
@@ -155,6 +155,20 @@ def set_output_directory():
     else:
         settings['output_path'] = path
         console.print(f"Output directory set to: {settings['output_path']}", style="green")
+
+
+def set_batch_output_directory():
+
+    """ similar to setting output, but for batch downloaded albums in a nested folder """
+
+    # print the message to be shown to the user, aling with the current directory they are in
+    console.print(Panel("Set batch output directory", style="bold blue")) 
+    console.print(f"Current directory: {settings['output_path']}")
+
+    # now set the path
+    batch_path = Prompt.ask("Enter a new directory to save all saved albums", default=settings["output_path"])
+
+
 
 def set_cookie_file():
     """Set the cookie file"""
