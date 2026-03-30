@@ -167,10 +167,10 @@ def run_batch_download():
     show_current_settings()
 
     # use console.print to show batch download options and menu
-    console.print(Panel("Batch Download Albums / Playlsits", style="blue"))
+    console.print(Panel("Batch Download Albums / Playlsits", style="bold blue"))
     console.print(Text(
         "Point to a folder containing Exportify CSV files (one per album/playlist).\n"
-        "Each CSV will become its own subfolder in your output directory.\n",
+        "Each CSV will become its own subfolder in your output directory.\n"
         "The folders name and structure will be the same as the Exportify CSV",
         style="white"
     ))
@@ -226,7 +226,7 @@ def run_batch_download():
 
 def set_cookie_file():
     """Set the cookie file"""
-    console.print(Panel("Set Cookie File", style="bright_yellow"))
+    console.print(Panel("Set Cookie File", style="bold yellow"))
     console.print(f"Current cookie file: {settings['cookie_file'] or 'None'}")
     
     if Confirm.ask("Do you want to use a cookie file?", default=settings['cookie_file'] is not None):
