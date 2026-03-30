@@ -1,6 +1,6 @@
 """This is the main TUI file, core logic and functions is in functions.py"""
 
-import functions, batch_download
+import functions
 import os
 import sys
 from rich.console import Console
@@ -157,17 +157,71 @@ def set_output_directory():
         console.print(f"Output directory set to: {settings['output_path']}", style="green")
 
 
-def set_batch_output_directory():
+def run_batch_download():
 
-    """ similar to setting output, but for batch downloaded albums in a nested folder """
+    """ Batch download albums/playlists from a folder of Exportify CSVs """
 
-    # print the message to be shown to the user, aling with the current directory they are in
-    console.print(Panel("Set batch output directory", style="bold blue")) 
-    console.print(f"Current directory: {settings['output_path']}")
+    # clear console, show main banner and current settings
+    console.clear()
+    show_banner()
+    show_current_settings()
 
-    # now set the path
-    batch_path = Prompt.ask("Enter a new directory to save all saved albums", default=settings["output_path"])
+    # use console.print to show batch download options and menu
+    console.print(Panel("Batch Download Albums / Playlsits", style="bold blue"))
+    console.print(Text(
+        "Point to a folder containing Exportify CSV files (one per album/playlist).\n"
+        "Each CSV will become its own subfolder in your output directory.\n",
+        "The folders name and structure will be the same as the Exportify CSV",
+        style="italic white"
+    ))
+    console.print()
 
+    # CSV source folder, ask for input, then take the input, and check if csv folder exists in the directory, else exit and prompt to continue
+    csv_folder = Prompt.ask("Enter path to folder containing your CSV files")
+    if not os.path.isdir(csv_folder):
+        console.print("Directory not found!", style="red")
+        Prompt.ask("\nPress Enter to continue...")
+        return
+    
+    # CSV output/base folder, prompt user for the output folder, and check directory
+    output_base = Prompt.ask(
+        "Enter output base directory (album subfolders will be created here)",
+        default=settings["output_path"]
+    )
+
+    # check if directory exists, if not, then try to create one, if we cant create one, show an error and ask to continue
+    if not os.path.exists(output_base):
+        if Confirm.ask(f"Directory '{output_base}' doesnt exist. Create it?"):
+            try:
+                os.makedirs(output_base, exist_ok=True)
+            except Exception as e:
+                console.print(f"Could not create directory: {e}", style="red")
+                Prompt.ask("\nPress Enter to continue...")
+                return
+        else:
+            Prompt.ask("\nPress Enter to continue...")
+            return
+        
+    # inheriting from global settings and formats, print to the user the current settings and formats and a way to change them
+    console.print(
+        f"\nUsing format [cyan]{settings['format'].upper()}[/cyan]"
+        f"and platform [cyan]{settings['platform'].upper()}[/cyan]"
+        f"(change these in Settings if needed).\n"
+    )
+
+    # final check for running the batchdownload script
+    if not Confirm.ask("Start batch download?", default=True):
+        return
+    
+    # now use the batch_download.py logic from what the user inputted here, import batchdownload
+    import batch_download as bd
+    bd.run(
+        csv_folder=csv_folder,
+        output_base=output_base,
+        audio_format=settings["format"],
+        platform=settings["platform"],
+    )
+    Prompt.ask("\nPress Enter to continue...")
 
 
 def set_cookie_file():
@@ -435,7 +489,8 @@ def main_menu():
             ("5", "Download from Single URL", "Download audio from a direct URL ( can be a YT video url or playlist )"),
             ("6", "Download from Search", "Search and download by track/artist name"),
             ("7", "Settings", "Configure format (MP3/FLAC/M4A), output directory, and cookies"),
-            ("8", "Exit", "Exit the application")
+            ("8", "Batch Download Albums (New)", "Download a whole folder of Exportify CSVs into organised album folders"),
+            ("9", "Exit", "Exit the application"),
         ]
         
         table = Table(title="SpotFetch Main Menu", box=box.ROUNDED, title_style="bold cyan")
@@ -451,7 +506,7 @@ def main_menu():
         
         choice = Prompt.ask(
             "Select an option",
-            choices=[str(i) for i in range(1, 9)],
+            choices=[str(i) for i in range(1, 10)],
             default="1"
         )
         
@@ -470,6 +525,8 @@ def main_menu():
         elif choice == "7":
             configure_settings()
         elif choice == "8":
+            run_batch_download()
+        elif choice == "9":
             console.print("\nThank you for using SpotFetch!", style="bold cyan")
             console.print("Bye Bye!!", style="bold yellow")
             sys.exit(0)
