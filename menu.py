@@ -167,7 +167,7 @@ def run_batch_download():
     show_current_settings()
 
     # use console.print to show batch download options and menu
-    console.print(Panel("Batch Download Albums / Playlsits", style="bold blue"))
+    console.print(Panel("Batch Download Albums / Playlsits", style="blue"))
     console.print(Text(
         "Point to a folder containing Exportify CSV files (one per album/playlist).\n"
         "Each CSV will become its own subfolder in your output directory.\n",
